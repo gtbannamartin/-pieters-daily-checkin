@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Pieters Family — Daily Check-In</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --cream: #FAF8F4;
+    --ink: #1C1A17;
+    --ink-soft: #5A5750;
+    --ink-faint: #9E9B94;
+    --aidan-warm: #C8503A;
+    --aidan-light: #FDF0ED;
+    --aidan-mid: #E8A090;
+    --shaylynn-cool: #2E6E8E;
+    --shaylynn-light: #EDF5F9;
+    --shaylynn-mid: #8BBDD0;
+    --gold: #C49A3C;
+    --gold-light: #FBF4E3;
+    --divider: #E8E4DC;
+    --check-green: #2D7A5F;
+    --check-green-light: #EAF4EF;
+    --radius: 14px;
+    --radius-sm: 8px;
+  }
+
+  html { background: var(--cream); }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    min-height: 100vh;
+    padding: 0 0 60px;
+  }
+
+  /* ---- HEADER ---- */
+  .site-header {
+    padding: 40px 24px 28px;
+    text-align: center;
+    border-bottom: 1px solid var(--divider);
+    background: var(--cream);
+    position: relative;
+  }
+  .family-name {
+    font-family: 'DM Serif Display', serif;
+    font-size: 13px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 6px;
+  }
+  .header-date {
+    font-family: 'DM Serif Display', serif;
+    font-size: 26px;
+    color: var(--ink);
+    line-height: 1.2;
+  }
+  .header-sub {
+    font-size: 13px;
+    color: var(--ink-faint);
+    margin-top: 6px;
+    font-weight: 300;
+  }
+
+  /* ---- TABS ---- */
+  .tab-bar {
+    display: flex;
+    border-bottom: 1px solid var(--divider);
+    background: var(--cream);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  .tab-btn {
+    flex: 1;
+    padding: 14px 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    color: var(--ink-faint);
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+    position: relative;
+    bottom: -1px;
+  }
+  .tab-btn.active-aidan { color: var(--aidan-warm); border-bottom-color: var(--aidan-warm); }
+  .tab-btn.active-shaylynn { color: var(--shaylynn-cool); border-bottom-color: var(--shaylynn-cool); }
+  .tab-btn.active-parents { color: var(--gold); border-bottom-color: var(--gold); }
+
+  /* ---- PANELS ---- */
+  .panel { display: none; padding: 24px 20px; max-width: 520px; margin: 0 auto; }
+  .panel.active { display: block; }
+
+  /* ---- PERSON HEADER ---- */
+  .person-header { display: flex; align-items: center; gap: 14px; margin-bottom: 24px; }
+  .avatar {
+    width: 52px; height: 52px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'DM Serif Display', serif;
+    font-size: 18px; font-weight: 400; flex-shrink: 0;
+  }
+  .avatar-aidan { background: var(--aidan-light); color: var(--aidan-warm); border: 1.5px solid var(--aidan-mid); }
+  .avatar-shaylynn { background: var(--shaylynn-light); color: var(--shaylynn-cool); border: 1.5px solid var(--shaylynn-mid); }
+  .person-info {}
+  .person-name { font-family: 'DM Serif Display', serif; font-size: 20px; line-height: 1; }
+  .person-context { font-size: 12px; color: var(--ink-faint); margin-top: 3px; font-weight: 300; }
+
+  /* ---- GREETING ---- */
+  .greeting-card {
+    border-radius: var(--radius);
+    padding: 18px 20px;
+    margin-bottom: 20px;
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    font-size: 15px;
+    line-height: 1.7;
+  }
+  .greeting-aidan { background: var(--aidan-light); color: #7A3025; border: 1px solid #EFBCB4; }
+  .greeting-shaylynn { background: var(--shaylynn-light); color: #1C4D63; border: 1px solid #AACFDE; }
+  .greeting-sign { font-style: normal; font-family: 'DM Sans', sans-serif; font-size: 12px; color: var(--ink-faint); margin-top: 10px; display: block; }
+
+  /* ---- SECTION LABEL ---- */
+  .section-label {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 10px;
+    margin-top: 22px;
+  }
+  .section-label:first-of-type { margin-top: 0; }
+
+  /* ---- TASKS ---- */
+  .task-list { display: flex; flex-direction: column; gap: 2px; }
+  .task-item {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 13px 14px;
+    background: white;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--divider);
+    cursor: pointer;
+    transition: all 0.18s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .task-item:active { transform: scale(0.98); }
+  .task-item.completed { background: var(--check-green-light); border-color: #B8DECE; }
+
+  .check-circle {
+    width: 22px; height: 22px; min-width: 22px;
+    border-radius: 50%;
+    border: 1.5px solid var(--divider);
+    display: flex; align-items: center; justify-content: center;
+    margin-top: 1px;
+    transition: all 0.2s;
+    background: white;
+  }
+  .task-item.completed .check-circle {
+    background: var(--check-green);
+    border-color: var(--check-green);
+  }
+  .check-icon { display: none; }
+  .task-item.completed .check-icon { display: block; }
+
+  .task-body {}
+  .task-title { font-size: 14px; font-weight: 500; line-height: 1.4; transition: color 0.18s; }
+  .task-item.completed .task-title { color: var(--check-green); text-decoration: line-through; text-decoration-color: #8DCBB9; }
+  .task-note { font-size: 12px; color: var(--ink-faint); margin-top: 2px; font-weight: 300; line-height: 1.4; }
+  .task-item.completed .task-note { color: #8DCBB9; }
+
+  /* ---- PROGRESS ---- */
+  .progress-wrap { margin-top: 14px; }
+  .progress-row { display: flex; justify-content: space-between; font-size: 12px; color: var(--ink-faint); margin-bottom: 6px; }
+  .progress-track { height: 5px; background: var(--divider); border-radius: 3px; overflow: hidden; }
+  .progress-fill { height: 100%; border-radius: 3px; transition: width 0.4s ease; }
+  .fill-aidan { background: var(--aidan-warm); }
+  .fill-shaylynn { background: var(--shaylynn-cool); }
+  .fill-green { background: var(--check-green); }
+
+  /* ---- INSPIRATION ---- */
+  .quote-card {
+    background: white;
+    border: 1px solid var(--divider);
+    border-radius: var(--radius);
+    padding: 18px 20px;
+    margin-bottom: 10px;
+  }
+  .quote-text {
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--ink);
+  }
+  .quote-attr { font-size: 12px; color: var(--ink-faint); margin-top: 8px; font-weight: 300; }
+
+  /* ---- LOCATION BADGE ---- */
+  .location-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--shaylynn-light);
+    color: var(--shaylynn-cool);
+    border: 1px solid var(--shaylynn-mid);
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: 12px;
+    font-weight: 500;
+    margin-bottom: 16px;
+  }
+  .location-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--shaylynn-cool); }
+
+  /* ---- PARENTS PANEL ---- */
+  .parent-card {
+    background: white;
+    border: 1px solid var(--divider);
+    border-radius: var(--radius);
+    padding: 18px 20px;
+    margin-bottom: 12px;
+  }
+  .parent-card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+  .parent-card-name { font-family: 'DM Serif Display', serif; font-size: 16px; }
+  .status-pill {
+    font-size: 11px; font-weight: 500; padding: 3px 10px;
+    border-radius: 20px;
+  }
+  .pill-aidan { background: var(--aidan-light); color: var(--aidan-warm); }
+  .pill-shaylynn { background: var(--shaylynn-light); color: var(--shaylynn-cool); }
+  .parent-stat { font-size: 13px; color: var(--ink-soft); margin-top: 3px; }
+  .parent-divider { height: 1px; background: var(--divider); margin: 12px 0; }
+
+  /* ---- NOTIFY BUTTON ---- */
+  .notify-btn {
+    width: 100%;
+    margin-top: 20px;
+    padding: 14px;
+    border-radius: var(--radius);
+    border: 1.5px solid var(--check-green);
+    background: white;
+    color: var(--check-green);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.18s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .notify-btn:active { background: var(--check-green-light); transform: scale(0.98); }
+  .notify-sent { background: var(--check-green-light); color: var(--check-green); border-color: #B8DECE; }
+
+  /* ---- FOOTER ---- */
+  .panel-footer { text-align: center; margin-top: 32px; padding-top: 20px; border-top: 1px solid var(--divider); }
+  .panel-footer p { font-size: 13px; color: var(--ink-faint); line-height: 1.7; font-weight: 300; }
+  .heart { color: var(--aidan-warm); }
+
+</style>
+</head>
+<body>
+
+<div class="site-header">
+  <p class="family-name">The Pieters Family</p>
+  <p class="header-date" id="header-date">Monday, March 16</p>
+  <p class="header-sub">Daily check-in &mdash; sent with love from home</p>
+</div>
+
+<div class="tab-bar">
+  <button class="tab-btn active-aidan" onclick="showPanel('aidan', this)">Aidan</button>
+  <button class="tab-btn" onclick="showPanel('shaylynn', this)">Shaylynn</button>
+  <button class="tab-btn" onclick="showPanel('parents', this)">Parents</button>
+</div>
+
+<!-- ======== AIDAN PANEL ======== -->
+<div class="panel active" id="panel-aidan">
+
+  <div class="person-header">
+    <div class="avatar avatar-aidan">A</div>
+    <div class="person-info">
+      <div class="person-name">Aidan Pieters</div>
+      <div class="person-context">Tuskegee University &mdash; Year 1, Semester 2</div>
+    </div>
+  </div>
+
+  <div class="greeting-card greeting-aidan">
+    Good morning, Aidan. Today is a new start. You don't have to do everything perfectly &mdash; you just have to begin. We are with you every step.
+    <span class="greeting-sign">&mdash; Mom &amp; Dad</span>
+  </div>
+
+  <div class="section-label">Today's tasks</div>
+  <div class="task-list" id="aidan-tasks">
+
+    <div class="task-item" onclick="toggleTask(this, 'aidan')">
+      <div class="check-circle">
+        <svg class="check-icon" width="11" height="9" viewBox="0 0 11 9" fill="none">
+          <path d="M1 4.5L4 7.5L10 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="task-body">
+        <div class="task-title">Send letters to Dean and professors</div>
+        <div class="task-note">Fill in each name before you send &mdash; Dad has them ready for you</div>
+      </div>
+    </div>
+
+    <div class="task-item" onclick="toggleTask(this, 'aidan')">
+      <div class="check-circle">
+        <svg class="check-icon" width="11" height="9" viewBox="0 0 11 9" fill="none">
+          <path d="M1 4.5L4 7.5L10 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="task-body">
+        <div class="task-title">Call cafeteria manager &mdash; reschedule interview</div>
+        <div class="task-note">That job puts you around people every day &mdash; worth the call</div>
+      </div>
+    </div>
+
+    <div class="task-item" onclick="toggleTask(this, 'aidan')">
+      <div class="check-circle">
+        <svg class="check-icon" width="11" height="9" viewBox="0 0 11 9" fill="none">
+          <path d="M1 4.5L4 7.5L10 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="task-body">
+        <div class="task-title">Visit mailroom &mdash; get your locker assigned</div>
+        <div class="task-note">Small thing, but having your own space matters</div>
+      </div>
+    </div>
+
+    <div class="task-item" onclick="toggleTask(this, 'aidan')">
+      <div class="check-circle">
+        <svg class="check-icon" width="11" height="9" viewBox="0 0 11 9" fill="none">
+          <path d="M1 4.5L4 7.5L10 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="task-body">
+        <div class="task-title">Text your floor RA &mdash; ask about dinner together</div>
+        <div class="task-note">This is exactly what RAs are there for &mdash; reach out</div>
+      </div>
+    </div>
+
+    <div class="task-item" onclick="toggleTask(this, 'aidan')">
+      <div class="check-circle">
+        <svg class="check-icon" width="11" height="9" viewBox="0 0 11 9" fill="none">
+          <path d="M1 4.5L4 7.5L10 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="task-body">
+        <div class="task-title">Attend every class today</div>
+        <div class="task-note">Just show up. That's the whole job today.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="progress-wrap">
+    <div class="progress-row">
+      <span id="aidan-prog-text">0 of 5 complete</span>
+      <span id="aidan-prog-pct">0%</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill fill-aidan" id="aidan-prog-fill" style="width:0%"></div>
+    </div>
+  </div>
+
+  <button class="notify-btn" id="aidan-notify-btn" onclick="notifyParents('aidan')">
+    Notify parents I'm done for the day
+  </button>
+
+  <div class="section-label">Words from home</div>
+  <div class="quote-card">
+    <div class="quote-text">"You don't have to see the whole staircase. Just take the first step."</div>
+    <div class="quote-attr">&mdash; Martin Luther King Jr.</div>
+  </div>
+  <div class="quote-card">
+    <div class="quote-text">"Courage doesn't always roar. Sometimes courage is the quiet voice at the end of the day saying, I will try again tomorrow."</div>
+    <div class="quote-attr">&mdash; Mary Anne Radmacher</div>
+  </div>
+  <div class="quote-card">
+    <div class="quote-text">"You are braver than you believe, stronger than you seem, and smarter than you think."</div>
+    <div class="quote-attr">&mdash; A.A. Milne</div>
+  </div>
+
+  <div class="panel-footer">
+    <p>Call us anytime.<br>Text us when you've eaten.<br><span class="heart">We love you, Aidan.</span></p>
+  </div>
+
+</div>
+
+<!-- ======== SHAYLYNN PANEL ======== -->
+<div class="panel" id="panel-shaylynn">
+
+  <div class="person-header">
+    <div class="avatar avatar-shaylynn">S</div>
+    <div class="person-info">
+      <div class="person-name">Shaylynn Pieters</div>
+      <div class="person-context">Scripps College &mdash; Year 3, Semester 2 (Abroad)</div>
+    </div>
+  </div>
+
+  <div class="location-badge">
+    <div class="location-dot"></div>
+    Barcelona, Spain
+  </div>
+
+  <div class="greeting-card greeting-shaylynn">
+    Buenos d&iacute;as, Shaylynn! We think about you every single day &mdash; adventuring in Barcelona while we're all at home missing your energy. You are doing something remarkable. Don't forget to look up from your phone occasionally and actually see the city.
+    <span class="greeting-sign">&mdash; Mom &amp; Dad (with love &amp; a little jealousy)</span>
+  </div>
+
+  <div class="section-label">Check in today</div>
+  <div class="task-list" id="shaylynn-tasks">
+
+    <div class="task-item" onclick="toggleTask(this, 'shaylynn')">
+      <div class="check-circle">
+        <svg class="check-icon" width="11" height="9" viewBox="0 0 11 9" fill="none">
+          <path d="M1 4.5L4 7.5L10 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="task-body">
+        <div class="task-title">Send a voice note or text home today</div>
+        <div class="task-note">Doesn't have to be long &mdash; just let us hear your voice</div>
+      </div>
+    </div>
+
+    <div class="task-item" onclick="toggleTask(this, 'shaylynn')">
+      <div class="check-circle">
+        <svg class="check-icon" width="11" height="9" viewBox="0 0 11 9" fill="none">
+          <path d="M1 4.5L4 7.5L10 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="task-body">
+        <div class="task-title">Eat something wonderful today</div>
+        <div class="task-note">You are in Barcelona &mdash; this should not be difficult</div>
+      </div>
+    </div>
+
+    <div class="task-item" onclick="toggleTask(this, 'shaylynn')">
+      <div class="check-circle">
+        <svg class="check-icon" width="11" height="9" viewBox="0 0 11 9" fill="none">
+          <path d="M1 4.5L4 7.5L10 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="task-body">
+        <div class="task-title">Do one thing that surprises you today</div>
+        <div class="task-note">A street, a museum, a conversation &mdash; something unplanned</div>
+      </div>
+    </div>
+
+    <div class="task-item" onclick="toggleTask(this, 'shaylynn')">
+      <div class="check-circle">
+        <svg class="check-icon" width="11" height="9" viewBox="0 0 11 9" fill="none">
+          <path d="M1 4.5L4 7.5L10 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="task-body">
+        <div class="task-title">Check in on your brother</div>
+        <div class="task-note">Even a short text from you means the world to him right now</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="progress-wrap">
+    <div class="progress-row">
+      <span id="shaylynn-prog-text">0 of 4 complete</span>
+      <span id="shaylynn-prog-pct">0%</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill fill-shaylynn" id="shaylynn-prog-fill" style="width:0%"></div>
+    </div>
+  </div>
+
+  <button class="notify-btn" style="border-color: var(--shaylynn-cool); color: var(--shaylynn-cool);" id="shaylynn-notify-btn" onclick="notifyParents('shaylynn')">
+    Send love home
+  </button>
+
+  <div class="section-label">For your Barcelona days</div>
+  <div class="quote-card">
+    <div class="quote-text">"Not all those who wander are lost."</div>
+    <div class="quote-attr">&mdash; J.R.R. Tolkien</div>
+  </div>
+  <div class="quote-card">
+    <div class="quote-text">"Travel is the only thing you buy that makes you richer."</div>
+    <div class="quote-attr">&mdash; Anonymous</div>
+  </div>
+  <div class="quote-card">
+    <div class="quote-text">"She is tossed by the waves but does not sink."</div>
+    <div class="quote-attr">&mdash; Motto of Paris (and a good one for anyone living abroad)</div>
+  </div>
+
+  <div class="panel-footer">
+    <p>We are so proud of you, Shaylynn.<br>The world is yours right now &mdash; take it.<br><span class="heart">We love you from Chicago.</span></p>
+  </div>
+
+</div>
+
+<!-- ======== PARENTS PANEL ======== -->
+<div class="panel" id="panel-parents">
+
+  <p style="font-family:'DM Serif Display',serif; font-size:20px; margin-bottom:6px;">Overview</p>
+  <p style="font-size:13px; color:var(--ink-faint); margin-bottom:24px; font-weight:300;">How both kids are doing today</p>
+
+  <div class="parent-card">
+    <div class="parent-card-header">
+      <div class="parent-card-name">Aidan</div>
+      <div class="status-pill pill-aidan" id="aidan-status">0 of 5 done</div>
+    </div>
+    <div class="parent-stat">Tuskegee University &mdash; Alabama</div>
+    <div class="parent-divider"></div>
+    <div style="font-size:13px; color:var(--ink-soft); line-height:1.7;">
+      Tasks: letters to Dean &amp; professors, cafeteria interview, mailroom locker, RA dinner, attend all classes.
+    </div>
+    <div class="progress-track" style="margin-top:12px;">
+      <div class="progress-fill fill-aidan" id="aidan-parent-fill" style="width:0%"></div>
+    </div>
+  </div>
+
+  <div class="parent-card">
+    <div class="parent-card-header">
+      <div class="parent-card-name">Shaylynn</div>
+      <div class="status-pill pill-shaylynn" id="shaylynn-status">0 of 4 done</div>
+    </div>
+    <div class="parent-stat">Scripps College Abroad &mdash; Barcelona, Spain</div>
+    <div class="parent-divider"></div>
+    <div style="font-size:13px; color:var(--ink-soft); line-height:1.7;">
+      Check-ins: call home, eat well, explore something new, check in on Aidan.
+    </div>
+    <div class="progress-track" style="margin-top:12px;">
+      <div class="progress-fill fill-shaylynn" id="shaylynn-parent-fill" style="width:0%"></div>
+    </div>
+  </div>
+
+  <div class="parent-card" style="background:var(--gold-light); border-color:#E8D5A0;">
+    <p style="font-size:12px; font-weight:500; color:var(--gold); letter-spacing:0.08em; text-transform:uppercase; margin-bottom:8px;">Note to parents</p>
+    <p style="font-size:13px; color:#7A5C1A; line-height:1.7;">
+      When either child clicks "Notify parents," it appears here as a completed notification. You can refresh this page to check their progress at any time. Update the task lists daily by sharing a new version of this link each morning.
+    </p>
+  </div>
+
+  <div id="notifications" style="margin-top:4px;"></div>
+
+  <div class="panel-footer">
+    <p>You are doing a beautiful thing for both of them.<br><span class="heart">&#10084;</span></p>
+  </div>
+
+</div>
+
+<script>
+  var counts = { aidan: 0, shaylynn: 0 };
+  var totals = { aidan: 5, shaylynn: 4 };
+
+  function showPanel(name, btn) {
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => {
+      b.classList.remove('active-aidan','active-shaylynn','active-parents');
+    });
+    document.getElementById('panel-' + name).classList.add('active');
+    var cls = name === 'aidan' ? 'active-aidan' : name === 'shaylynn' ? 'active-shaylynn' : 'active-parents';
+    btn.classList.add(cls);
+  }
+
+  function toggleTask(el, person) {
+    var wasDone = el.classList.contains('completed');
+    el.classList.toggle('completed');
+    counts[person] += wasDone ? -1 : 1;
+    updateProgress(person);
+  }
+
+  function updateProgress(person) {
+    var c = counts[person], t = totals[person];
+    var pct = Math.round((c / t) * 100);
+    document.getElementById(person + '-prog-fill').style.width = pct + '%';
+    document.getElementById(person + '-prog-pct').textContent = pct + '%';
+    document.getElementById(person + '-prog-text').textContent = c + ' of ' + t + ' complete';
+    document.getElementById(person + '-parent-fill').style.width = pct + '%';
+    document.getElementById(person + '-status').textContent = c + ' of ' + t + ' done';
+  }
+
+  function notifyParents(person) {
+    var btn = document.getElementById(person + '-notify-btn');
+    btn.classList.add('notify-sent');
+    btn.textContent = person === 'aidan' ? 'Done for the day — parents notified!' : 'Love sent home!';
+    btn.disabled = true;
+    var name = person === 'aidan' ? 'Aidan' : 'Shaylynn';
+    var now = new Date();
+    var time = now.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+    var note = document.createElement('div');
+    note.style.cssText = 'background:var(--check-green-light);border:1px solid #B8DECE;border-radius:var(--radius-sm);padding:12px 16px;margin-top:8px;font-size:13px;color:var(--check-green);';
+    note.textContent = name + ' checked in at ' + time + ' \u2014 ' + counts[person] + ' of ' + totals[person] + ' tasks complete.';
+    document.getElementById('notifications').appendChild(note);
+  }
+
+  var d = new Date();
+  var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  var months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  document.getElementById('header-date').textContent = days[d.getDay()] + ', ' + months[d.getMonth()] + ' ' + d.getDate();
+</script>
+
+</body>
+</html>
