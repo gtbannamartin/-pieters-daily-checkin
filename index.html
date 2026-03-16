@@ -25,6 +25,9 @@
     --check-green-light: #EAF4EF;
     --urgent: #B03A2E;
     --urgent-light: #FDECEA;
+    --carolyn-warm: #6B5EA8;
+    --carolyn-light: #F2F0FA;
+    --carolyn-mid: #B8B0DC;
     --radius: 14px;
     --radius-sm: 8px;
   }
@@ -41,6 +44,7 @@
   .tab-btn.active-aidan { color: var(--aidan-warm); border-bottom-color: var(--aidan-warm); }
   .tab-btn.active-shaylynn { color: var(--shaylynn-cool); border-bottom-color: var(--shaylynn-cool); }
   .tab-btn.active-parents { color: var(--gold); border-bottom-color: var(--gold); }
+  .tab-btn.active-carolyn { color: var(--carolyn-warm); border-bottom-color: var(--carolyn-warm); }
 
   .panel { display: none; padding: 24px 20px; max-width: 520px; margin: 0 auto; }
   .panel.active { display: block; }
@@ -55,6 +59,8 @@
   .greeting-card { border-radius: var(--radius); padding: 18px 20px; margin-bottom: 20px; font-family: 'DM Serif Display', serif; font-style: italic; font-size: 15px; line-height: 1.7; }
   .greeting-aidan { background: var(--aidan-light); color: #7A3025; border: 1px solid #EFBCB4; }
   .greeting-shaylynn { background: var(--shaylynn-light); color: #1C4D63; border: 1px solid #AACFDE; }
+  .greeting-carolyn { background: var(--carolyn-light); color: #3D3472; border: 1px solid var(--carolyn-mid); }
+  .avatar-carolyn { background: var(--carolyn-light); color: var(--carolyn-warm); border: 1.5px solid var(--carolyn-mid); }
   .greeting-sign { font-style: normal; font-family: 'DM Sans', sans-serif; font-size: 12px; color: var(--ink-faint); margin-top: 10px; display: block; }
 
   .section-label { font-size: 10px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 10px; margin-top: 22px; }
@@ -78,6 +84,7 @@
   .progress-fill { height: 100%; border-radius: 3px; transition: width 0.4s ease; }
   .fill-aidan { background: var(--aidan-warm); }
   .fill-shaylynn { background: var(--shaylynn-cool); }
+  .fill-carolyn { background: var(--carolyn-warm); }
 
   .mood-wrap { background: white; border: 1px solid var(--divider); border-radius: var(--radius); padding: 16px 18px; }
   .mood-label { font-size: 13px; color: var(--ink-soft); margin-bottom: 12px; }
@@ -125,6 +132,7 @@
   .status-pill { font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: 20px; }
   .pill-aidan { background: var(--aidan-light); color: var(--aidan-warm); }
   .pill-shaylynn { background: var(--shaylynn-light); color: var(--shaylynn-cool); }
+  .pill-carolyn { background: var(--carolyn-light); color: var(--carolyn-warm); }
   .parent-stat { font-size: 13px; color: var(--ink-soft); }
   .parent-divider { height: 1px; background: var(--divider); margin: 12px 0; }
 
@@ -151,6 +159,7 @@
 <div class="tab-bar">
   <button class="tab-btn active-aidan" onclick="showPanel('aidan',this)">Aidan</button>
   <button class="tab-btn" onclick="showPanel('shaylynn',this)">Shaylynn</button>
+  <button class="tab-btn" onclick="showPanel('carolyn',this)">Carolyn</button>
   <button class="tab-btn" onclick="showPanel('parents',this)">Parents</button>
 </div>
 
@@ -338,10 +347,89 @@
   </div>
 </div>
 
+<!-- ======== CAROLYN ======== -->
+<div class="panel" id="panel-carolyn">
+  <div class="person-header">
+    <div class="avatar avatar-carolyn">C</div>
+    <div class="person-info">
+      <div class="person-name">Carolyn Pieters</div>
+      <div class="person-context">Wife &mdash; Home base, Chicago</div>
+    </div>
+  </div>
+
+  <div class="greeting-card greeting-carolyn">
+    Good morning, Carolyn. Everything you do to hold this family together doesn't go unnoticed &mdash; not by the kids, and not by me. Today, I just want you to take care of yourself the way you take care of everyone else. You matter too.
+    <span class="greeting-sign">&mdash; Martin</span>
+  </div>
+
+  <div class="section-label">Today's intentions</div>
+  <div class="task-list">
+    <div class="task-item" onclick="toggleTask(this,'carolyn')">
+      <div class="check-circle"><svg class="check-icon" width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="task-body"><div class="task-title">Check the Parents tab &mdash; see how both kids are doing</div><div class="task-note">Aidan and Shaylynn's mood and task progress live there throughout the day</div></div>
+    </div>
+    <div class="task-item" onclick="toggleTask(this,'carolyn')">
+      <div class="check-circle"><svg class="check-icon" width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="task-body"><div class="task-title">Send Aidan a short text today</div><div class="task-note">Doesn't have to be long &mdash; just let him feel you</div></div>
+    </div>
+    <div class="task-item" onclick="toggleTask(this,'carolyn')">
+      <div class="check-circle"><svg class="check-icon" width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="task-body"><div class="task-title">Do one thing today that is just for you</div><div class="task-note">A walk, a quiet cup of coffee, something you enjoy &mdash; you've earned it</div></div>
+    </div>
+    <div class="task-item" onclick="toggleTask(this,'carolyn')">
+      <div class="check-circle"><svg class="check-icon" width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="task-body"><div class="task-title">Leave Martin a note below &mdash; anything on your mind</div><div class="task-note">He checks the Parents tab. He'll see it.</div></div>
+    </div>
+  </div>
+
+  <div class="progress-wrap">
+    <div class="progress-row"><span id="carolyn-prog-text">0 of 4 complete</span><span id="carolyn-prog-pct">0%</span></div>
+    <div class="progress-track"><div class="progress-fill fill-carolyn" id="carolyn-prog-fill" style="width:0%"></div></div>
+  </div>
+
+  <div class="section-label">How are you feeling today?</div>
+  <div class="mood-wrap">
+    <div class="mood-label">Take a moment. Where are you today?</div>
+    <div class="mood-buttons">
+      <button class="mood-btn mood-1" onclick="setMood('carolyn',1,this)">😔</button>
+      <button class="mood-btn mood-2" onclick="setMood('carolyn',2,this)">😕</button>
+      <button class="mood-btn mood-3" onclick="setMood('carolyn',3,this)">😐</button>
+      <button class="mood-btn mood-4" onclick="setMood('carolyn',4,this)">🙂</button>
+      <button class="mood-btn mood-5" onclick="setMood('carolyn',5,this)">😊</button>
+    </div>
+    <div class="mood-scale"><span>Really struggling</span><span>Really good</span></div>
+    <div class="mood-selected-text" id="carolyn-mood-text"></div>
+  </div>
+
+  <div class="section-label">Leave a note for Martin</div>
+  <div class="message-wrap">
+    <textarea id="carolyn-msg" placeholder="Something on your mind, something you need, something you want him to know &mdash; he'll see it on the Parents tab."></textarea>
+    <button class="send-msg-btn" id="carolyn-msg-btn" onclick="sendMessage('carolyn')">Send note to Martin</button>
+  </div>
+
+  <div class="section-label">Words for today</div>
+  <div class="quote-card">
+    <div class="quote-text">"A strong woman is one who feels deeply and loves fiercely. Her tears flow as abundantly as her laughter. A strong woman is both soft and powerful."</div>
+    <div class="quote-attr">&mdash; Sylvia Plath</div>
+  </div>
+  <div class="quote-card">
+    <div class="quote-text">"You are allowed to be both a masterpiece and a work in progress simultaneously."</div>
+    <div class="quote-attr">&mdash; Sophia Bush</div>
+  </div>
+  <div class="quote-card">
+    <div class="quote-text">"The most courageous act is still to think for yourself. Aloud."</div>
+    <div class="quote-attr">&mdash; Coco Chanel</div>
+  </div>
+
+  <div class="panel-footer">
+    <p>You are the heartbeat of this family, Carolyn.<br>We see you. We love you.<br><span class="heart">&#10084;</span></p>
+  </div>
+</div>
+
 <!-- ======== PARENTS ======== -->
 <div class="panel" id="panel-parents">
-  <p style="font-family:'DM Serif Display',serif;font-size:20px;margin-bottom:6px;">Overview</p>
-  <p style="font-size:13px;color:var(--ink-faint);margin-bottom:24px;font-weight:300;">How both kids are doing today</p>
+  <p style="font-family:'DM Serif Display',serif;font-size:20px;margin-bottom:6px;">Family Overview</p>
+  <p style="font-size:13px;color:var(--ink-faint);margin-bottom:24px;font-weight:300;">Good morning, Martin &mdash; here's how everyone is doing today</p>
 
   <div class="parent-card">
     <div class="parent-card-header">
@@ -375,33 +463,50 @@
     </div>
   </div>
 
+  <div class="parent-card" style="border-color:var(--carolyn-mid);background:var(--carolyn-light);">
+    <div class="parent-card-header">
+      <div class="parent-card-name" style="color:var(--carolyn-warm);">Carolyn</div>
+      <div class="status-pill pill-carolyn" id="carolyn-status">0 of 4 done</div>
+    </div>
+    <div class="parent-stat" style="color:#5A5280;">Home base &mdash; Chicago</div>
+    <div style="margin-top:8px;display:flex;align-items:center;gap:8px;">
+      <span style="font-size:12px;color:#8A80B0;">Mood today:</span>
+      <span style="font-size:18px;" id="carolyn-mood-display">&mdash;</span>
+      <span style="font-size:12px;color:#8A80B0;font-style:italic;" id="carolyn-mood-label-display"></span>
+    </div>
+    <div class="progress-track" style="margin-top:10px;">
+      <div class="progress-fill fill-carolyn" id="carolyn-parent-fill" style="width:0%"></div>
+    </div>
+  </div>
+
   <div class="parent-card" style="background:var(--gold-light);border-color:#E8D5A0;">
     <p style="font-size:12px;font-weight:500;color:var(--gold);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:8px;">How this works</p>
-    <p style="font-size:13px;color:#7A5C1A;line-height:1.7;">Mood updates, notes from the kids, and urgent call requests all appear in the activity feed below the moment they happen. If either child taps "I need to talk," it shows up here immediately — call them right away.</p>
+    <p style="font-size:13px;color:#7A5C1A;line-height:1.7;">Mood updates, notes, and urgent call requests appear in the activity feed below the moment they happen. If either child taps "I need to talk," call them right away. Carolyn's notes to you also appear here.</p>
   </div>
 
   <div class="section-label">Activity feed</div>
   <div id="parent-feed">
-    <div style="font-size:13px;color:var(--ink-faint);font-style:italic;padding:12px 0;">No activity yet today. Check back after the kids check in.</div>
+    <div style="font-size:13px;color:var(--ink-faint);font-style:italic;padding:12px 0;">No activity yet today. Check back after the family checks in.</div>
   </div>
 
   <div class="panel-footer">
-    <p>You are doing a beautiful thing for both of them.<br><span class="heart">&#10084;</span></p>
+    <p>You built this for them. That says everything.<br><span class="heart">&#10084;</span></p>
   </div>
 </div>
 
 <script>
-  var counts = {aidan:0, shaylynn:0};
-  var totals = {aidan:5, shaylynn:4};
+  var counts = {aidan:0, shaylynn:0, carolyn:0};
+  var totals = {aidan:5, shaylynn:4, carolyn:4};
   var moodLabels = ['','Really struggling','Not great','Okay','Doing well','Really good'];
   var moodEmojis = ['','😔','😕','😐','🙂','😊'];
   var feedEmpty = true;
 
   function showPanel(name, btn) {
     document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('active');});
-    document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active-aidan','active-shaylynn','active-parents');});
+    document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active-aidan','active-shaylynn','active-parents','active-carolyn');});
     document.getElementById('panel-'+name).classList.add('active');
-    btn.classList.add(name==='aidan'?'active-aidan':name==='shaylynn'?'active-shaylynn':'active-parents');
+    var cls = name==='aidan'?'active-aidan':name==='shaylynn'?'active-shaylynn':name==='carolyn'?'active-carolyn':'active-parents';
+    btn.classList.add(cls);
   }
 
   function toggleTask(el, person) {
@@ -427,7 +532,7 @@
     document.getElementById(person+'-mood-text').textContent = moodLabels[level];
     document.getElementById(person+'-mood-display').textContent = moodEmojis[level];
     document.getElementById(person+'-mood-label-display').textContent = moodLabels[level];
-    var name = person==='aidan'?'Aidan':'Shaylynn';
+    var name = person==='aidan'?'Aidan':person==='shaylynn'?'Shaylynn':'Carolyn';
     addFeed('mood', name+' is feeling: '+moodEmojis[level]+' '+moodLabels[level]);
   }
 
@@ -436,10 +541,10 @@
     if (!msg) return;
     var btn = document.getElementById(person+'-msg-btn');
     btn.classList.add('sent');
-    btn.textContent = 'Note sent home';
+    btn.textContent = person==='carolyn' ? 'Note sent to Martin' : 'Note sent home';
     btn.disabled = true;
     document.getElementById(person+'-msg').disabled = true;
-    var name = person==='aidan'?'Aidan':'Shaylynn';
+    var name = person==='aidan'?'Aidan':person==='shaylynn'?'Shaylynn':'Carolyn';
     addFeed('message', name+' says: "'+msg+'"');
   }
 
