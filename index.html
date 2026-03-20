@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Pieters Family — Daily Check-In · March 19</title>
+<title>Pieters Family — Daily Check-In</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -146,6 +146,17 @@
   .panel-footer { text-align: center; margin-top: 32px; padding-top: 20px; border-top: 1px solid var(--divider); }
   .panel-footer p { font-size: 13px; color: var(--ink-faint); line-height: 1.7; font-weight: 300; }
   .heart { color: var(--aidan-warm); }
+
+  .sms-card { background: white; border: 1px solid var(--divider); border-radius: var(--radius); padding: 16px 18px; margin-bottom: 10px; }
+  .sms-card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+  .sms-card-name { font-family: 'DM Serif Display', serif; font-size: 15px; }
+  .sms-tag { font-size: 10px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 9px; border-radius: 20px; }
+  .sms-tag-aidan { background: var(--aidan-light); color: var(--aidan-warm); }
+  .sms-tag-shaylynn { background: var(--shaylynn-light); color: var(--shaylynn-cool); }
+  .sms-body { font-size: 13px; color: var(--ink-soft); line-height: 1.7; background: var(--cream); border-radius: var(--radius-sm); padding: 12px 14px; border: 1px solid var(--divider); font-style: italic; }
+  .sms-copy-btn { margin-top: 10px; width: 100%; padding: 10px; border-radius: var(--radius-sm); border: 1.5px solid var(--divider); background: white; font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 500; color: var(--ink-soft); cursor: pointer; transition: all 0.18s; -webkit-tap-highlight-color: transparent; }
+  .sms-copy-btn:active { transform: scale(0.98); }
+  .sms-copy-btn.copied { background: var(--check-green-light); border-color: #B8DECE; color: var(--check-green); }
 </style>
 </head>
 <body>
@@ -169,12 +180,23 @@
     <div class="avatar avatar-aidan">A</div>
     <div class="person-info">
       <div class="person-name">Aidan Pieters</div>
-      <div class="person-context">Tuskegee University &mdash; Year 1, Semester 2</div>
+      <div class="person-context">Tuskegee University &mdash; Tuskegee, Alabama &mdash; Year 1, Semester 2</div>
     </div>
   </div>
 
-  <div class="greeting-card greeting-aidan">
-    Good afternoon, Aidan. We are thinking about you today and just wanted to check in. Whatever you&#39;ve gotten done so far &mdash; we see it, and we&#39;re proud of you. If there are items on your list you&#39;ve already knocked out, go ahead and check them off &mdash; it matters, and we love watching that progress bar move. Keep going. We love you.
+  <!-- Aidan morning greeting (before noon CST) -->
+  <div class="greeting-card greeting-aidan" id="aidan-greeting-morning">
+    Good morning, Aidan. We are so proud of you. Completing that cafeteria paperwork and getting Mr. Myron&#39;s green light &mdash; that is not a small thing. That is you building your own foundation at Tuskegee, and we could not be more proud. Today may be the day you walk in for that first shift. Whether it is or not, you are already ahead. Knock out your list, keep moving, and enjoy that Chick-fil-A today &mdash; you have earned it. We love you.
+    <span class="greeting-sign">&mdash; Mom &amp; Dad</span>
+  </div>
+  <!-- Aidan evening greeting - default (after noon, cafeteria not checked) -->
+  <div class="greeting-card greeting-aidan" id="aidan-greeting-evening-default" style="display:none;">
+    Good evening, Aidan. Look at what you moved today. Whatever is checked on that list &mdash; we see it, and we are proud of every single one. The cafeteria chapter is just getting started &mdash; Mr. Myron believes in you, and so do we. Rest well tonight. You are doing the work, and it is showing. We love you.
+    <span class="greeting-sign">&mdash; Mom &amp; Dad</span>
+  </div>
+  <!-- Aidan evening greeting - congratulations (after noon, cafeteria checked) -->
+  <div class="greeting-card greeting-aidan" id="aidan-greeting-evening-congrats" style="display:none;">
+    Good evening, Aidan. You did it &mdash; first shift at the Tuskegee University cafeteria. We cannot stop smiling over here. This is what it looks like when you show up, do the paperwork, make the calls, and follow through. Mr. Myron saw something in you, and tonight you proved he was right. This is just the beginning. We are so incredibly proud of you. Rest well &mdash; you earned every bit of it tonight. We love you.
     <span class="greeting-sign">&mdash; Mom &amp; Dad</span>
   </div>
 
@@ -196,9 +218,9 @@
       <div class="check-circle"><svg class="check-icon" width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
       <div class="task-body"><div class="task-title">Call Ms. Jackson &mdash; check on her health</div><div class="task-note">She was recently hospitalized &mdash; a call from you will mean a lot to her</div></div>
     </div>
-    <div class="task-item" onclick="toggleTask(this,'aidan')">
+    <div class="task-item" id="aidan-cafeteria-task" onclick="toggleTask(this,'aidan'); checkCafeteriaTask()">
       <div class="check-circle"><svg class="check-icon" width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-      <div class="task-body"><div class="task-title">Follow up with Mr. Myron &mdash; cafeteria paperwork</div><div class="task-note">Confirm your paperwork is approved and you&#39;re set to start this week &mdash; this is a big one, Aidan</div></div>
+      <div class="task-body"><div class="task-title">First shift at the cafeteria &mdash; did you start today?</div><div class="task-note">Mr. Myron said by end of week &mdash; paperwork is done and you are cleared. Check this off if today was the day.</div></div>
     </div>
   </div>
 
@@ -268,8 +290,14 @@
 
   <div class="location-badge"><div class="location-dot"></div>Barcelona, Spain</div>
 
-  <div class="greeting-card greeting-shaylynn">
-    Buenas noches, Shaylynn. It&#39;s late in Barcelona and we hope tonight was a good one. No agenda, no checklist &mdash; just your mom and dad sending love across the ocean. We think about you constantly and we couldn&#39;t be more proud. Sleep well, mija.
+  <!-- Shaylynn morning greeting (before noon Barcelona time) -->
+  <div class="greeting-card greeting-shaylynn" id="shaylynn-greeting-morning">
+    Buenos d&#237;as, Shaylynn. A new day in Barcelona &mdash; and we are already thinking about you. Whatever this morning holds, step into it. The city is right outside your door and you are exactly where you are supposed to be. We love watching you live this chapter. Make it a beautiful one today, mija.
+    <span class="greeting-sign">&mdash; Mom &amp; Dad (con mucho amor desde Chicago)</span>
+  </div>
+  <!-- Shaylynn evening greeting (after noon Barcelona time) -->
+  <div class="greeting-card greeting-shaylynn" id="shaylynn-greeting-evening" style="display:none;">
+    Buenas noches, Shaylynn. It&#39;s evening in Barcelona and we hope today gave you something worth keeping &mdash; a moment, a conversation, a view you won&#39;t forget. No agenda, no checklist tonight &mdash; just your mom and dad sending love across the ocean. We think about you constantly and we couldn&#39;t be more proud. Descansa bien, mija.
     <span class="greeting-sign">&mdash; Mom &amp; Dad (with love &amp; a little jealousy)</span>
   </div>
 
@@ -519,6 +547,26 @@
     <div style="font-size:13px;color:var(--ink-faint);font-style:italic;padding:12px 0;">No activity yet today. Check back after the family checks in.</div>
   </div>
 
+  <div class="section-label">Daily texts &mdash; ready to send</div>
+
+  <div class="sms-card">
+    <div class="sms-card-header">
+      <div class="sms-card-name">Aidan</div>
+      <div class="sms-tag sms-tag-aidan" id="sms-aidan-tag">Morning</div>
+    </div>
+    <div class="sms-body" id="sms-aidan-body"></div>
+    <button class="sms-copy-btn" id="sms-aidan-btn" onclick="copyText('aidan')">Copy &mdash; paste into Messages</button>
+  </div>
+
+  <div class="sms-card">
+    <div class="sms-card-header">
+      <div class="sms-card-name">Shaylynn</div>
+      <div class="sms-tag sms-tag-shaylynn" id="sms-shaylynn-tag">Morning</div>
+    </div>
+    <div class="sms-body" id="sms-shaylynn-body"></div>
+    <button class="sms-copy-btn" id="sms-shaylynn-btn" onclick="copyText('shaylynn')">Copy &mdash; paste into Messages</button>
+  </div>
+
   <div class="panel-footer">
     <p>You built this for them. That says everything.<br><span class="heart">&#10084;</span></p>
   </div>
@@ -526,10 +574,83 @@
 
 <script>
   var counts = {aidan:0, shaylynn:0, carolyn:0};
-  var totals = {aidan:5, shaylynn:4, carolyn:4};
+  var totals = {aidan:6, shaylynn:4, carolyn:4};
   var moodLabels = ['','Really struggling','Not great','Okay','Doing well','Really good'];
   var moodEmojis = ['','😔','😕','😐','🙂','😊'];
   var feedEmpty = true;
+  var cafeteriaChecked = false;
+
+  function getBarcelonaOffset(date) {
+    var year = date.getFullYear();
+    var lsm = new Date(year, 2, 31);
+    while (lsm.getDay() !== 0) { lsm.setDate(lsm.getDate() - 1); }
+    lsm.setHours(1, 0, 0, 0);
+    var lso = new Date(year, 9, 31);
+    while (lso.getDay() !== 0) { lso.setDate(lso.getDate() - 1); }
+    lso.setHours(1, 0, 0, 0);
+    return (date >= lsm && date < lso) ? 2 : 1;
+  }
+
+  function initGreetings() {
+    var now = new Date();
+    var isMorningAidan = now.getHours() < 12;
+    var utcMs = now.getTime() + (now.getTimezoneOffset() * 60000);
+    var barcelonaTime = new Date(utcMs + (getBarcelonaOffset(now) * 3600000));
+    var isMorningShaylynn = barcelonaTime.getHours() < 12;
+    document.getElementById('aidan-greeting-morning').style.display = isMorningAidan ? 'block' : 'none';
+    document.getElementById('aidan-greeting-evening-default').style.display = (!isMorningAidan && !cafeteriaChecked) ? 'block' : 'none';
+    document.getElementById('aidan-greeting-evening-congrats').style.display = (!isMorningAidan && cafeteriaChecked) ? 'block' : 'none';
+    document.getElementById('shaylynn-greeting-morning').style.display = isMorningShaylynn ? 'block' : 'none';
+    document.getElementById('shaylynn-greeting-evening').style.display = isMorningShaylynn ? 'none' : 'block';
+  }
+
+  function checkCafeteriaTask() {
+    cafeteriaChecked = document.getElementById('aidan-cafeteria-task').classList.contains('completed');
+    if (new Date().getHours() >= 12) {
+      document.getElementById('aidan-greeting-evening-default').style.display = cafeteriaChecked ? 'none' : 'block';
+      document.getElementById('aidan-greeting-evening-congrats').style.display = cafeteriaChecked ? 'block' : 'none';
+    }
+  }
+
+  function initTexts(isMorningAidan, isMorningShaylynn, isFriday) {
+    var aidanTag, aidanText, shaylynnTag, shaylynnText;
+    if (isMorningAidan) {
+      aidanTag = 'Morning';
+      aidanText = isFriday
+        ? 'Good morning, Aidan! Happy Friday — hope it’s a great one at Tuskegee. Enjoy that Chick-fil-A today! Check the daily log when you get a chance. Love you!'
+        : 'Good morning, Aidan! New day at Tuskegee — check the daily log and let’s get it. Love you, son.';
+    } else {
+      aidanTag = 'Evening';
+      aidanText = isFriday
+        ? 'Good evening, Aidan. Hope you had a great Friday — and that Chick-fil-A hit the spot. Check the daily log when you get a moment. Rest well. Love you.'
+        : 'Good evening, Aidan. Hope the day treated you well at Tuskegee. Check the daily log when you get a moment. Proud of you — rest well. Love you.';
+    }
+    if (isMorningShaylynn) {
+      shaylynnTag = 'Morning';
+      shaylynnText = 'Buenos días, Shaylynn! Hope Barcelona gives you something beautiful today. Check the daily log when you get a chance — we left something in there for you. We love you from Chicago!';
+    } else {
+      shaylynnTag = 'Evening';
+      shaylynnText = 'Buenas noches, Shaylynn. Hope tonight was a good one in Barcelona. Check the daily log — there’s a note in there for you. We love you, mija.';
+    }
+    document.getElementById('sms-aidan-tag').textContent = aidanTag;
+    document.getElementById('sms-aidan-body').textContent = aidanText;
+    document.getElementById('sms-shaylynn-tag').textContent = shaylynnTag;
+    document.getElementById('sms-shaylynn-body').textContent = shaylynnText;
+  }
+
+  function copyText(person) {
+    var text = document.getElementById('sms-'+person+'-body').textContent;
+    var btn = document.getElementById('sms-'+person+'-btn');
+    var reset = function() { btn.textContent = 'Copy — paste into Messages'; btn.classList.remove('copied'); };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function() { btn.textContent = 'Copied!'; btn.classList.add('copied'); setTimeout(reset, 2500); });
+    } else {
+      var ta = document.createElement('textarea');
+      ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+      document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+      btn.textContent = 'Copied!'; btn.classList.add('copied'); setTimeout(reset, 2500);
+    }
+  }
 
   function showPanel(name, btn) {
     document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('active');});
@@ -581,19 +702,19 @@
   function needToTalk(person) {
     var btn = document.getElementById(person+'-urgent-btn');
     btn.classList.add('activated');
-    btn.innerHTML = '<div class="urgent-dot" style="background:white;width:8px;height:8px;border-radius:50%;flex-shrink:0;"></div> Mom or Dad &mdash; please call me';
+    btn.innerHTML = '<div class="urgent-dot" style="background:white;width:8px;height:8px;border-radius:50%;flex-shrink:0;"></div> Mom or Dad — please call me';
     btn.disabled = true;
     var name = person==='aidan'?'Aidan':'Shaylynn';
-    addFeed('urgent', name+' needs to talk \u2014 please call as soon as you can.');
+    addFeed('urgent', name+' needs to talk — please call as soon as you can.');
   }
 
   function notifyParents(person) {
     var btn = document.getElementById(person+'-notify-btn');
     btn.classList.add('notify-sent');
-    btn.textContent = person==='aidan'?'Done for the day \u2014 parents notified!':'Love sent home!';
+    btn.textContent = person==='aidan'?'Done for the day — parents notified!':'Love sent home!';
     btn.disabled = true;
     var name = person==='aidan'?'Aidan':'Shaylynn';
-    addFeed('task', name+' finished for the day \u2014 '+counts[person]+' of '+totals[person]+' tasks complete.');
+    addFeed('task', name+' finished for the day — '+counts[person]+' of '+totals[person]+' tasks complete.');
   }
 
   function addFeed(type, text) {
@@ -612,6 +733,16 @@
   var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
   var months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
   document.getElementById('header-date').textContent = days[d.getDay()]+', '+months[d.getMonth()]+' '+d.getDate();
+
+  var now = new Date();
+  var isMorningAidan = now.getHours() < 12;
+  var isFriday = now.getDay() === 5;
+  var utcMs = now.getTime() + (now.getTimezoneOffset() * 60000);
+  var barcelonaTime = new Date(utcMs + (getBarcelonaOffset(now) * 3600000));
+  var isMorningShaylynn = barcelonaTime.getHours() < 12;
+
+  initGreetings();
+  initTexts(isMorningAidan, isMorningShaylynn, isFriday);
 </script>
 </body>
 </html>
